@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-//=========================================================
+// =========================================================
 // 2. Constante: valiarables que nunca cambian
-//=========================================================
+// =========================================================
 
 #define NUM_EQUIPOS 5
 // Donde escribas NUM_EQUIPOS, el compilador lo reemplaza por 5
@@ -12,12 +12,12 @@
 // Un equipo con  o más fallos es sospechoso.
 
 
-#define NUM_EVVENTOS 27
+#define NUM_EVENTOS 27
 // Número total de eventos en nuestro arreglos
 
-//===========================================================
+// ===========================================================
 // 3. ENUM: Nombres para los tipos de evento
-//===========================================================
+// ===========================================================
 enum TipoEvento{
     ACCESO_CORRECTO,           // vale 0
     CONTRASENA_INCORRECTA,     // vale 1
@@ -29,9 +29,9 @@ enum TipoEvento{
 // Así no recordamos "1 = contraseña incorrecta", escribimos el nombre.
 // NUM_TIPOS_EVENTO al final nos da el número total de tipos (4).
 
-//=============================================================
+// =============================================================
 //DATOS GLOBALES: Arreglos con los datos de entrada
-//=============================================================
+// =============================================================
 
 char *nombre_equipos[] = {"PC-01", "PC-02", "PC-03", "PC-04", "PC-05"};
 // Arreglo de apuntadores a caracter (strings).
@@ -61,9 +61,9 @@ int tipos[] = {
 // Arreglo de 27 entero. Cada número es el índice del tipo de evento.
 // 0=Acceso_Correcto, 1=Contrasena_Incorrecta, 2=Usuario_Inexistente, 3=Acceso_Bloqueado
 
-// ================================================================================================
+// ============================================================================
 // PROTOTIPOS DE FUNCIONES: Aviso al compilador
-// ================================================================================================
+// ===========================================================================
 // Le dicen al copilador: "existenestas funciones".
 // Van antes de main() para que main() pueda llamarlas sin error.
 
@@ -79,16 +79,61 @@ void procesarEventos(int matriz[][NUM_TIPOS_EVENTOS], int num_eventos);
 void imprimirLog(int num_eventos);
 // Imprime el log de eventos.
 
-void imprimirResumen(int matriz[][NUM_TIPOS_EVENTO]);
+void imprimirResumen(int matriz[][NUM_TIPOS_EVENTOS]);
 // Imprime el resumen por equipo.
 
 int esSospechoso(int matriz[][NUM_TIPOS_EVENTOS], int equipos);
 // Determina si un equipo es sospechoso (1 = si, 0 = no).
 
-//==================================================================================================
-
-
+// ==================================================================================================
+//FUNCIÓN MAIN: Punto de entrada del programa
+// ===================================================================================================
 int main(){
+    //Matriz bidemensional: [equipos][tipos de evvento]
+    // 5 filas (equipos) x 4 columnas (tipo)
+    //{0} inicializa TODA las celdas en 0.
+    int matriz[NUM_EQUIPOS][NUM_TIPOS_EVENTOS] = {0};
 
+    // 1. Procesar enevnentos para llenar la matriz.
+    //  Pasa la matriz y el número de eventos.
+    procesarEventos(matriz, NUM_EVENTOS);
+
+    // 2. Imprimir el log de eventos.
+    imprimirLog(NUM_EVENTOS);
+
+    // 3. I,pri,ir el resumen por equipo.
+    imprimirResumen(matriz);
+
+    // 4. Le dice al sistema operativo que terminó bien
+    return 0;
+}
+
+// ============================================================================
+// FUNCIÓN: obtenreIdiceTipo (PASO POR VALOR)
+// ============================================================================
+// Recibe un número (tipo) por VALOR (una copia).
+// Verificar que sea válido (0 a 3).
+// Devuelve el indice si es valido, o -1 si no lo es.
+// No modifica el valor original por que recibe una copia.
+int obtenerIndiceTipo(int tipo) {
+    // verificar que el tipo esté en el rango válidado.
+    if (tipo >= 0 && tipo < NUM_TIPOS_EVENTOS) {
+        return tipo; // Válido: devuelve el indice
+    }
+    return -1; // Inválido: devuelve -1
+}
+
+// ============================================================================
+// FUNCIÓN: incrementarContador (PASO POR REFERENCIA)
+// ============================================================================
+// Recibe un APUNTADORv a un entero (la dirección de memoria).
+// Incrementa el valor en esa dierección en 1.
+// si modifica el valor original porque recibe su dirección.
+void incrementarContador(int *contador) {
+     // *contador accede al valor apuntado.
+     // (*contador)++ incrementa el valor en esa dirección en 1.
+     // Los paréntesis son necerarios porque *contador++ se interpretaría.
+     // como *(contador++), que es diferente.
+     (*contador)++;
 
 }
