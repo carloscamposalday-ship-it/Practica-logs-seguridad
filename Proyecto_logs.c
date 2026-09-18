@@ -21,7 +21,7 @@
 enum TipoEvento{
     ACCESO_CORRECTO,           // vale 0
     CONTRASENA_INCORRECTA,     // vale 1
-    USUARIOS_INEXISTENTE,      // vale 2
+    USUARIO_INEXISTENTE,      // vale 2
     ACCESO_BLOQUEADO,          // vale 3
     NUM_TIPOS_EVENTOS          // vale 4(siempre al final)
 };
@@ -33,12 +33,12 @@ enum TipoEvento{
 //DATOS GLOBALES: Arreglos con los datos de entrada
 // =============================================================
 
-char *nombre_equipos[] = {"PC-01", "PC-02", "PC-03", "PC-04", "PC-05"};
+char *nombres_equipos[] = {"PC-01", "PC-02", "PC-03", "PC-04", "PC-05"};
 // Arreglo de apuntadores a caracter (strings).
 // nombre_equipos[0] = "PC-01", nombre_equipos[1] = "PC-02", etc.
 // Solo lo usamos para imprimir.
 
-char *nombre_tipos[] = {
+char *nombres_tipos[] = {
     "Accesos_Correcto",
     "Contrasena_Incorrecta",
     "Usuario_Inexistente",
@@ -136,4 +136,75 @@ void incrementarContador(int *contador) {
      // como *(contador++), que es diferente.
      (*contador)++;
 
+}
+// =============================================================================
+// FUNCIÓN: procesarEVentos(USA APUNTADORES)
+// =============================================================================
+// Recorre los arreglos de eventos usando ARIMÉTICA DE APUNTADORES.
+// Para cada evento:
+//  1. Obtiene el equipo y el tiempo.
+//  2. Valida el tipo con obtenerIndiceTipo (paso por valor).
+//  3. Incrementa la celda correspondiente con incrementarContador (paso por referencia).
+void procesarEventos(int matriz[][NUM_TIPOS_EVENTOS], int num_eventos) {
+    // Apuntadores al inicio de los arreglos.
+    // ptr_equipo apunta a equipos[0].
+    // ptr_tipo apunta a tipos[0].
+    int *ptr_equipo = equipos;
+    int *ptr_tipo = tipos;
+
+    // Recorre todos los eventos.
+    for (int i = 0; i < num_eventos; i++){
+        // *(ptr_equipo + i) es equivalente a equipos[i]
+        // pero usando ARIMÉTICA DE APUNTADORES.
+        int equipo = *(ptr_equipo + i);
+        int tipo = *(ptr_tipo + i);
+
+        // Valida el tipo (pasa por valor.
+        int col = obtenerIndiceTipo(tipo);
+
+        // Si el tipo es válido, incrementa la celda
+        if (col != -1) {
+            // &matriz[equipo][col] es la DIRECCIÓN de la celda.
+            // incrementarContador la recibe por REFERENCIA.
+            incrementarContador(&matriz[equipo][col]);
+            
+        }
+    }
+}
+
+// =======================================================================
+// FUNCIÓN: esSospechoso
+// ========================================================================
+// Suma los fallos (Contraseña_Incorrecta + Ususarios_Inexistente).
+// Compara con x.
+// Devueleve 1 si es sospechoso, 0 si no.
+int esSospechoso(int matriz[][NUM_TIPOS_EVENTOS], int equipo) {
+    // Suma las columnas de fallos para esetipo.
+    int fallos = matriz[equipo][CONTRASENA_INCORRECTA] +
+                matriz[equipo][USUARIO_INEXISTENTE];
+
+    // "más de X" significa extrictamente mayor que X.
+    // Si X=3, entonces 4 o más es sospechoso.
+    return fallos > x;  // Devuelve 1 (Verdadedo) 0 0 (falso)
+}
+
+// ==========================================================================
+// FUNCIÓN: imprimirLog
+// ===========================================================================
+// Imprimir todos los eventos en orden.
+// Usar nombre_equipos y nombres_tipos para mostrar texto legible.
+void imprimirLog(int num_eventos) {
+    printf("\n== LOG DE EVENTOS ===\n");
+
+    for (int i = 0; i < num_eventos; i++) {
+        // i+1 por que los eventos empiezan en 1, no en 0.
+        // nombres_equipos[equipos[i]] obtiene el nombre del equipo.
+        // nombres_tipos[tipos[i]] obtiene el nombre del equipo.
+        // %2d = entero con al menos 2 digitos.
+        // &-6s = string alineado a la izquierda en 6 caracteres.
+        printf("Evento %2d: %-6s - %s\n",
+                i + 1,
+                nombres_equipos[equipos[i]],
+                nombres_tipos[tipos[i]]);
+    }
 }
