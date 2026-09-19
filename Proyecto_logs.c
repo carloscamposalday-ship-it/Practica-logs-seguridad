@@ -8,8 +8,8 @@
 // Donde escribas NUM_EQUIPOS, el compilador lo reemplaza por 5
 
 #define x 3
-// Umbral de la regla:"más de X fallos" = "mś de 3".
-// Un equipo con  o más fallos es sospechoso.
+// Umbral de la regla:"más de X fallos" = "más de 3".
+// Un equipo con o más fallos es sospechoso.
 
 
 #define NUM_EVENTOS 27
@@ -23,7 +23,7 @@ enum TipoEvento{
     CONTRASENA_INCORRECTA,     // vale 1
     USUARIO_INEXISTENTE,      // vale 2
     ACCESO_BLOQUEADO,          // vale 3
-    NUM_TIPOS_EVENTOS          // vale 4(siempre al final)
+    NUM_TIPOS_EVENTO          // vale 4(siempre al final)
 };
 // Un enum asigna números automáticamente: 0, 1, 2, 3,..
 // Así no recordamos "1 = contraseña incorrecta", escribimos el nombre.
@@ -63,7 +63,7 @@ int tipos[] = {
 
 // ============================================================================
 // PROTOTIPOS DE FUNCIONES: Aviso al compilador
-// ===========================================================================
+//===========================================================================
 // Le dicen al copilador: "existenestas funciones".
 // Van antes de main() para que main() pueda llamarlas sin error.
 
@@ -73,16 +73,16 @@ int obtenerIndiceTipo(int tipo);
 void incrementarContador(int *contador);
 // Pasa por referencia: recibe un apuntador a contador y lo incrementa
 
-void procesarEventos(int matriz[][NUM_TIPOS_EVENTOS], int num_eventos);
+void procesarEventos(int matriz[][NUM_TIPOS_EVENTO], int num_eventos);
 // Procesa todos los eventos y llena la matriz.
 
 void imprimirLog(int num_eventos);
 // Imprime el log de eventos.
 
-void imprimirResumen(int matriz[][NUM_TIPOS_EVENTOS]);
+void imprimirResumen(int matriz[][NUM_TIPOS_EVENTO]);
 // Imprime el resumen por equipo.
 
-int esSospechoso(int matriz[][NUM_TIPOS_EVENTOS], int equipos);
+int esSospechoso(int matriz[][NUM_TIPOS_EVENTO], int equipo);
 // Determina si un equipo es sospechoso (1 = si, 0 = no).
 
 // ==================================================================================================
@@ -92,7 +92,7 @@ int main(){
     //Matriz bidemensional: [equipos][tipos de evvento]
     // 5 filas (equipos) x 4 columnas (tipo)
     //{0} inicializa TODA las celdas en 0.
-    int matriz[NUM_EQUIPOS][NUM_TIPOS_EVENTOS] = {0};
+    int matriz[NUM_EQUIPOS][NUM_TIPOS_EVENTO] = {0};
 
     // 1. Procesar enevnentos para llenar la matriz.
     //  Pasa la matriz y el número de eventos.
@@ -117,7 +117,7 @@ int main(){
 // No modifica el valor original por que recibe una copia.
 int obtenerIndiceTipo(int tipo) {
     // verificar que el tipo esté en el rango válidado.
-    if (tipo >= 0 && tipo < NUM_TIPOS_EVENTOS) {
+    if (tipo >= 0 && tipo < NUM_TIPOS_EVENTO) {
         return tipo; // Válido: devuelve el indice
     }
     return -1; // Inválido: devuelve -1
@@ -145,7 +145,7 @@ void incrementarContador(int *contador) {
 //  1. Obtiene el equipo y el tiempo.
 //  2. Valida el tipo con obtenerIndiceTipo (paso por valor).
 //  3. Incrementa la celda correspondiente con incrementarContador (paso por referencia).
-void procesarEventos(int matriz[][NUM_TIPOS_EVENTOS], int num_eventos) {
+void procesarEventos(int matriz[][NUM_TIPOS_EVENTO], int num_eventos) {
     // Apuntadores al inicio de los arreglos.
     // ptr_equipo apunta a equipos[0].
     // ptr_tipo apunta a tipos[0].
@@ -178,7 +178,7 @@ void procesarEventos(int matriz[][NUM_TIPOS_EVENTOS], int num_eventos) {
 // Suma los fallos (Contraseña_Incorrecta + Ususarios_Inexistente).
 // Compara con x.
 // Devueleve 1 si es sospechoso, 0 si no.
-int esSospechoso(int matriz[][NUM_TIPOS_EVENTOS], int equipo) {
+int esSospechoso(int matriz[][NUM_TIPOS_EVENTO], int equipo) {
     // Suma las columnas de fallos para esetipo.
     int fallos = matriz[equipo][CONTRASENA_INCORRECTA] +
                 matriz[equipo][USUARIO_INEXISTENTE];
@@ -208,3 +208,37 @@ void imprimirLog(int num_eventos) {
                 nombres_tipos[tipos[i]]);
     }
 }
+// =========================================================================
+// FUNCIÓN: imprimirResumen
+// =========================================================================
+// Imprime la tabla de resumen por equipo.
+// Muestra: Equipo, conteo de cada tipo, total fallos, y si es sospechoso.
+void imprimirResumen(int matriz[][NUM_TIPOS_EVENTO]) {
+    printf("\n=== RESUMEN POR EQUIPO ===\n");
+
+    // Encabezados de la tabla.
+    printf("%-8s %-8s %-12s %-10s %-10s %-8s %-12s\n",
+        "Equipo", "Correcto", "Contraseña", "Usuario", "Bloqueado", "Fallos", "sospechoso");
+
+    // Rocorre cada equipo.
+    for (int e = 0; e < NUM_EQUIPOS; e++) {
+        // Calcula el total de fallos para este equipo
+        int fallos = matriz[e][CONTRASENA_INCORRECTA] +
+                     matriz[e][USUARIO_INEXISTENTE];
+
+        // Imprimir la fila del equipo.
+        // nombres_equipos[e] = nombre del equipo.
+        // matriz[e][A(CCESO_CORRECTO] = conteo de acceso correto.
+        //esSospechos(matriz, e) ? "Si" : "No" = if corto.
+        printf("%-8s %-8d %-12d %-10d %-10d %-8d %-12s\n",
+        nombres_equipos[e],
+        matriz[e][ACCESO_CORRECTO],
+        matriz[e][CONTRASENA_INCORRECTA],
+        matriz[e][USUARIO_INEXISTENTE],
+        matriz[e][ACCESO_BLOQUEADO],
+        fallos,
+        esSospechoso(matriz, e) ? "SI" : "NO");
+
+    }
+}
+
