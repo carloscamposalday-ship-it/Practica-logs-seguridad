@@ -18,6 +18,6 @@ Ejecución
 
 Documentación
 
-- Diseño: https://github.com/carloscamposalday-ship-it/Proyecto_logs/wiki/Diseño
-- PSPO: https://github.com/carloscamposalday-ship-it/Proyecto_logs/wiki/PSPO
-- Pruebas: https://github.com/carloscamposalday-ship-it/Proyecto_logs/wiki/Pruebas
+- Diseño: https://github.com/carloscamposalday-ship-it/Practica-logs-seguridad/wiki/Diseño
+- PSPO: https://github.com/carloscamposalday-ship-it/Practica-logs-seguridad/wiki/PSPO
+- Pruebas: https://github.com/carloscamposalday-ship-it/Practica-logs-seguridad/wiki/Pruebas
