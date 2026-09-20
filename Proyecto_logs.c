@@ -39,7 +39,7 @@ char *nombres_equipos[] = {"PC-01", "PC-02", "PC-03", "PC-04", "PC-05"};
 // Solo lo usamos para imprimir.
 
 char *nombres_tipos[] = {
-    "Accesos_Correcto",
+    "Acceso_Correcto",
     "Contrasena_Incorrecta",
     "Usuario_Inexistente",
     "Acceso_Bloqueado"
@@ -218,7 +218,7 @@ void imprimirResumen(int matriz[][NUM_TIPOS_EVENTO]) {
 
     // Encabezados de la tabla.
     printf("%-8s %-8s %-12s %-10s %-10s %-8s %-12s\n",
-        "Equipo", "Correcto", "Contraseña", "Usuario", "Bloqueado", "Fallos", "sospechoso");
+        "Equipo", "Correcto", "Contraseña", "Usuario", "Bloqueado", "Fallos", "Sospechoso");
 
     // Rocorre cada equipo.
     for (int e = 0; e < NUM_EQUIPOS; e++) {
